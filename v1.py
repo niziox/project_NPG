@@ -37,7 +37,48 @@ def second_screen(status):
         root.quit()
 
     def add():
-        pass
+        # Create a database or connect to one
+        data = sqlite3.connect(f'{path}')
+
+        # Create cursor
+        cursor = data.cursor()
+
+        # Create table
+        systolic_arterial_pressure = int(measure1_entry.get())
+        diastolic_blood_pressure = int(measure2_entry.get())
+        current_date = datetime.now()
+        formatted_date = current_date.strftime('%d.%m.%Y')
+
+        if systolic_arterial_pressure < 120 and diastolic_blood_pressure < 80:
+            messagebox.showinfo(title='Powiadominenie o normie', message='Twoje ciśnienie jest optymalne')
+        elif 120 <= systolic_arterial_pressure <= 129 and 80 <= diastolic_blood_pressure <= 84:
+            messagebox.showinfo(title='Powiadominenie o normie', message='Twoje ciśnienie jest prawidłowe')
+        elif 130 <= systolic_arterial_pressure <= 139 and 85 <= diastolic_blood_pressure <= 89:
+            messagebox.showinfo(title='Powiadominenie o normie', message='Twoje ciśnienie jest prawidłowe wysokie')
+        elif 140 <= systolic_arterial_pressure <= 159 and 90 <= diastolic_blood_pressure <= 99:
+            messagebox.showwarning(title='Powiadominenie o normie', message='Masz łagodne nadciśnienie')
+        elif 160 <= systolic_arterial_pressure <= 179 and 100 <= diastolic_blood_pressure <= 109:
+            messagebox.showwarning(title='Powiadominenie o normie', message='Masz umiarkowane nadciśnienie')
+        elif systolic_arterial_pressure >= 180 and diastolic_blood_pressure >= 110:
+            messagebox.showwarning(title='Powiadominenie o normie', message='Masz ciężkie nadciśnienie')
+        else:
+            messagebox.showerror(title='Powiadominenie o normie', message='Ciężko określić')
+
+        cursor.execute("INSERT INTO addresses VALUES (:systolic_arterial_pressure, :diastolic_blood_pressure, :formatted_date)",
+                       {
+                           'systolic_arterial_pressure': systolic_arterial_pressure,
+                           'diastolic_blood_pressure': diastolic_blood_pressure,
+                           'formatted_date': formatted_date
+                       })
+
+        # Commit Changes
+        data.commit()
+
+        # Close Connection
+        data.close()
+
+        measure1_entry.delete(0, END)
+        measure2_entry.delete(0, END)
 
     def plot():
         pass
