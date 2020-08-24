@@ -33,7 +33,8 @@ def second_screen(status):
                     """)
 
     def leaving():
-        pass
+        messagebox.showinfo(title='Autorzy', message='Created by \n\n 1. Arkadiusz Kontek \n 2. Dawid Bogon \n 3. Konrad Kropornicki \n 4. Michał Święciło')
+        root.quit()
 
     def add():
         pass
