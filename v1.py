@@ -85,7 +85,165 @@ def second_screen(status):
 
     # Third screen
     def results():
-        pass
+        # Create a database or connect to one
+        data = sqlite3.connect(f'{path}')
+
+        # Create cursor
+        cursor = data.cursor()
+
+        # Create table
+
+        def back_to_second_screen():
+            second_screen(2)
+            results_label.destroy()
+            record_label.destroy()
+            filter_entry.destroy()
+            date_filter_button.destroy()
+            value_filter_button.destroy()
+            back_to_second_screen_button.destroy()
+            delete_button.destroy()
+
+        def delete():
+            # Create a database or connect to one
+            data = sqlite3.connect(f'{path}')
+
+            # Create cursor
+            cursor = data.cursor()
+
+            # Create table
+            cursor.execute(f"DELETE from addresses WHERE oid = {filter_entry.get()}")
+            messagebox.showinfo(title='Delete', message=f'Pozycja numer {filter_entry.get()} została pomyślnie usunięta')
+            back_to_second_screen()
+
+            # Commit Changes
+            data.commit()
+
+            # Close Connection
+            data.close()
+
+        def date_filter():
+            # Create a database or connect to one
+            data = sqlite3.connect(f'{path}')
+
+            # Create cursor
+            cursor = data.cursor()
+
+            # Create table
+            date = filter_entry.get()
+            cursor.execute("SELECT *, oid FROM addresses WHERE formatted_date = ?", (date,))
+            date_filtered_records = cursor.fetchall()
+            date_record_print = ''
+            for date_filtered in date_filtered_records:
+                date_record_print += str(date_filtered[3]) + '.  ' + str(date_filtered[2]) + "     " + str(date_filtered[0]) + " / " + str(date_filtered[1]) + "\n"
+
+            def clear_filters():
+                results()
+                date_filtered_label.destroy()
+                clear_filters_button.destroy()
+                filter_entry.destroy()
+                date_filter_button.destroy()
+                value_filter_button.destroy()
+                back_to_second_screen_button.destroy()
+                results_label.destroy()
+                delete_button.destroy()
+
+            date_filtered_label = Label(root, text=date_record_print)
+            date_filtered_label.grid(row=2, column=0, pady=20, columnspan=2)
+            clear_filters_button = Button(root, text='Wyczyć filtry', command=clear_filters)
+            clear_filters_button.grid(row=5, column=1)
+
+            # Commit Changes
+            data.commit()
+
+            # Close Connection
+            data.close()
+
+            record_label.destroy()
+            date_filter_button.config(state=DISABLED)
+            value_filter_button.config(state=DISABLED)
+            back_to_second_screen_button.config(state=DISABLED)
+            delete_button.config(state=DISABLED)
+
+        def value_filter():
+            # Create a database or connect to one
+            data = sqlite3.connect(f'{path}')
+
+            # Create cursor
+            cursor = data.cursor()
+
+            # Create table
+            value = filter_entry.get()
+            cursor.execute("SELECT *, oid FROM addresses WHERE systolic_arterial_pressure = ? or diastolic_blood_pressure = ?", (value, value))
+            value_filtered_records = cursor.fetchall()
+            value_record_print = ''
+            for value_filtered in value_filtered_records:
+                value_record_print += str(value_filtered[3]) + '.  ' + str(value_filtered[2]) + "     " + str(value_filtered[0]) + " / " + str(value_filtered[1]) + "\n"
+
+            def clear_filters():
+                results()
+                value_filtered_label.destroy()
+                clear_filters_button.destroy()
+                filter_entry.destroy()
+                date_filter_button.destroy()
+                value_filter_button.destroy()
+                back_to_second_screen_button.destroy()
+                results_label.destroy()
+                delete_button.destroy()
+
+            value_filtered_label = Label(root, text=value_record_print)
+            value_filtered_label.grid(row=2, column=0, pady=20, columnspan=2)
+            clear_filters_button = Button(root, text='Wyczyć filtry', command=clear_filters)
+            clear_filters_button.grid(row=5, column=1)
+
+            # Commit Changes
+            data.commit()
+
+            # Close Connection
+            data.close()
+
+            record_label.destroy()
+            date_filter_button.config(state=DISABLED)
+            value_filter_button.config(state=DISABLED)
+            back_to_second_screen_button.config(state=DISABLED)
+            delete_button.config(state=DISABLED)
+
+        cursor.execute("SELECT *, oid FROM addresses")
+        records = cursor.fetchall()
+
+        record_print = ''
+        for record in records:
+            record_print += str(record[3]) + '.  ' + str(record[2]) + "     " + str(record[0]) + " / " + str(record[1]) + "\n"
+
+        title_label.grid(columnspan=3)
+        results_label = Label(root, text='Wyniki:')
+        results_label.grid(row=1, column=0, pady=20, columnspan=3)
+        record_label = Label(root, text=record_print)
+        record_label.grid(row=2, column=0, columnspan=3)
+        filter_entry = Entry(root, width=40, borderwidth=5)
+        filter_entry.grid(row=3, column=0, pady=(20, 10), padx=10, columnspan=3)
+        date_filter_button = Button(root, text='Filtruj po dacie', command=date_filter)
+        date_filter_button.grid(row=4, column=0)
+        value_filter_button = Button(root, text='Filtruj po wartości', command=value_filter)
+        value_filter_button.grid(row=4, column=1)
+        delete_button = Button(root, text='Usuń', command=delete)
+        delete_button.grid(row=4, column=2)
+        back_to_second_screen_button = Button(root, text='Wróć', command=back_to_second_screen)
+        back_to_second_screen_button.grid(row=5, column=0, pady=10)
+
+        # Commit Changes
+        data.commit()
+
+        # Close Connection
+        data.close()
+
+        measure1_entry.destroy()
+        measure2_entry.destroy()
+        measure1_label.destroy()
+        measure2_label.destroy()
+        add_button.destroy()
+        results_button.destroy()
+        plot_button.destroy()
+        quit_button.destroy()
 
     measure1_label = Label(root, text='Podaj ciśnienie tętnicze skurczowe')
     measure1_label.grid(row=1, column=0, padx=10, pady=10)
