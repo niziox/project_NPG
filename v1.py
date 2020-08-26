@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from tkinter import *
@@ -81,7 +81,38 @@ def second_screen(status):
         measure2_entry.delete(0, END)
 
     def plot():
-        pass
+        # Create a database or connect to one
+        data = sqlite3.connect(f'{path}')
+
+        # Create cursor
+        cursor = data.cursor()
+
+        # Create table
+        cursor.execute("SELECT systolic_arterial_pressure, diastolic_blood_pressure FROM addresses")
+        plot_pressure_records = cursor.fetchall()
+
+        cursor.execute("SELECT oid, formatted_date FROM addresses")
+        plot_oid_date_records = cursor.fetchall()
+        plot_oid_date_list = []
+        for plot_pressure_record in plot_oid_date_records:
+            plot_oid_date_list.append(str(plot_pressure_record[0]) + '. ' + str(plot_pressure_record[1]))
+
+        plt.figure(figsize=(9.2, 7))
+        plt.plot(plot_oid_date_list, plot_pressure_records)
+        plt.xticks(rotation=90, fontsize=6)
+        plt.rc('xtick', labelsize=20)
+        orange_patch = mpatches.Patch(color='orange', label='ciśnienie tętnicze rozkurczowe')
+        blue_patch = mpatches.Patch(color='blue', label='ciśnienie tętnicze skurczowe')
+        plt.legend(handles=[blue_patch, orange_patch], bbox_to_anchor=(0., 1.05, 1., .105), loc='lower left', ncol=2, mode="expand", borderaxespad=-0.4)
+        plt.show()
+
+        # Commit Changes
+        data.commit()
+
+        # Close Connection
+        data.close()
+
+        root.quit()
 
     # Third screen
     def results():
