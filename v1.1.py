@@ -16,19 +16,21 @@ root.iconbitmap("images/icon.ico")
 root.geometry('600x550')
 root.config(background='#2e2e3d')
 
+
 def leaving():
     messagebox.showinfo(title='Autorzy',
                         message='Created by \n\n 1. Arkadiusz Kontek \n 2. Dawid Bogon \n 3. Konrad Kropornicki \n 4. Michał Święciło')
     root.quit()
-    
+
+
 def back(screen):
     pass
 
 
-
 def database_screen():
     pass
-    
+
+
 def help_info():
     help_text = "\n- Pomiar wykonuje się w pozycji siedzącej, w spokoju, po minimum 5-minutowym odpoczynku\n- Przed " \
                 "pomiarem przez minimum 30 minut nie należy palić tytoniu, pić kawy i wykonywać ćwiczeń fizycznych\n- "\
@@ -37,6 +39,7 @@ def help_info():
                 "w odstępach około minuty i przyjąć wartość średnią "
 
     messagebox.showinfo(title="Wskazówka", message=help_text)
+
 
 def add():
     pass
@@ -70,6 +73,7 @@ def add_screen():
     help_button.grid(row=4, column=0, pady=5, columnspan=2)
     back_from_adding_button = Button(root, text='POWRÓT', width=20, height=4, command=lambda: back('add_screen'))
     back_from_adding_button.grid(row=5, column=0, pady=5, columnspan=2)
+
 
 def options_screen():
     pass
