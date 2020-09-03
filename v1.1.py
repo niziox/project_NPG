@@ -188,7 +188,7 @@ def options_screen():
                           relief="solid")
     options_label.grid(row=0, column=0, padx=40, pady=15)
     brand_new_path = Button(root, text='NOWY ZAPIS', width=20, height=4, command=lambda: new_path_window('new'))
-    brand_new_path.grid(row=1, column=0, pady=15)
+    brand_new_path.grid(row=1, column=0, pady=5)
     existed_path = Button(root, text='OTWÓRZ ZAPIS', width=20, height=4, command=lambda: new_path_window('existed'))
     existed_path.grid(row=2, column=0, pady=5)
     back_from_options_button = Button(root, text='POWRÓT', width=20, height=4, command=lambda: back('options_screen'))
