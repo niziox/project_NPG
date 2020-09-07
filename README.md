@@ -44,7 +44,7 @@ Aplikacja zawiera funkjonalności:
 ## Status
 Trwają prace nad projektem.
 
-##Kontakt
+## Kontakt
 Stworozne przez:
 * Arkadiusz Kontek	arekkontek@student.agh.edu.pl
 * Dawid Bogon		bogondawid@student.agh.edu.pl
