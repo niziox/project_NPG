@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from tkinter import *
@@ -27,9 +27,101 @@ def back(screen):
     pass
 
 
-def database_screen():
+def filter_screen():
     pass
 
+
+def database_screen():
+    # Create a database or connect to one
+    file = open('paths/path_file.txt', 'a+')
+    file.seek(0)
+    path = file.readline()
+    data = sqlite3.connect(f'{path}.db')
+    file.close()
+
+    # Create cursor
+    cursor = data.cursor()
+
+    # Create table
+    cursor.execute("SELECT *, oid FROM addresses")
+    records = cursor.fetchall()
+
+    global scroll_record, record_print
+    scroll_record = Scrollbar(root, orient='vertical')
+    scroll_record.grid(row=1, column=1, sticky=NS)
+    record_print = Text(root, width=33, height=9, wrap=NONE, bg='#2e2e3d', fg='white', bd=0, yscrollcommand=scroll_record.set)
+
+    for record in records:
+        record_print.insert(END, "  " + str(record[3]) + '.  ' + str(record[2]) + "     " + str(record[0]) + " / " + str(record[1]) + "  " + "\n")
+
+    record_print.grid(row=1, column=0, sticky=E)
+    scroll_record.config(command=record_print.yview)
+
+    # Destroying redundant widgets
+    menu_label.destroy()
+    add_label.destroy()
+    database_button.destroy()
+    new_path_button.destroy()
+    quit_button.destroy()
+
+    # Defining new widgets
+    global database_welcome_label, back_from_database_button, filter_button, plot_button
+
+    database_welcome_label = Label(root, text='BAZA DANYCH', width=19, height=2, font="Verdana 32", bg='#161618',
+                                   fg="white", relief="solid")
+    database_welcome_label.grid(row=0, column=0, padx=40, pady=15, columnspan=2)
+    filter_button = Button(root, text='FILTRY', width=20, height=4, command=filter_screen)
+    filter_button.grid(row=2, column=0, pady=(10, 5), columnspan=2)
+    plot_button = Button(root, text='WYKRES', width=20, height=4, command=plot)
+    plot_button.grid(row=3, column=0, pady=5, columnspan=2)
+    back_from_database_button = Button(root, text='POWRÓT', width=20, height=4, command=lambda: back('database_screen'))
+    back_from_database_button.grid(row=4, column=0, pady=5, columnspan=2)
+
+    # Commit Changes
+    data.commit()
+
+    # Close Connection
+    data.close()
+
+def plot():
+    # Create a database or connect to one
+    file = open('paths/path_file.txt', 'a+')
+    file.seek(0)
+    path = file.readline()
+    data = sqlite3.connect(f'{path}.db')
+    file.close()
+
+    # Create cursor
+    cursor = data.cursor()
+
+    # Create table
+    cursor.execute("SELECT systolic_arterial_pressure, diastolic_blood_pressure FROM addresses")
+    plot_pressure_records = cursor.fetchall()
+
+    cursor.execute("SELECT oid, formatted_date FROM addresses")
+    plot_oid_date_records = cursor.fetchall()
+    plot_oid_date_list = []
+    for plot_pressure_record in plot_oid_date_records:
+        plot_oid_date_list.append(str(plot_pressure_record[0]) + '. ' + str(plot_pressure_record[1]))
+
+    plt.figure(figsize=(9.2, 7))
+    plt.plot(plot_oid_date_list, plot_pressure_records)
+    plt.xticks(rotation=90, fontsize=6)
+    plt.rc('xtick', labelsize=20)
+    orange_patch = mpatches.Patch(color='orange', label='ciśnienie tętnicze rozkurczowe')
+    blue_patch = mpatches.Patch(color='blue', label='ciśnienie tętnicze skurczowe')
+    plt.legend(handles=[blue_patch, orange_patch], bbox_to_anchor=(0., 1.05, 1., .105), loc='lower left', ncol=2,
+               mode="expand", borderaxespad=-0.4)
+    plt.show()
+
+    # Commit Changes
+    data.commit()
+
+    # Close Connection
+    data.close()
+
+    # Plot close
+    root.quit()
 
 def help_info():
     help_text = "\n- Pomiar wykonuje się w pozycji siedzącej, w spokoju, po minimum 5-minutowym odpoczynku\n- Przed " \
