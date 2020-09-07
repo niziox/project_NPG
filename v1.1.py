@@ -80,6 +80,8 @@ def database_screen():
     # Commit Changes
     data.commit()
 
+    # Close Connection
+    data.close()
 
 def plot():
     # Create a database or connect to one
@@ -118,8 +120,8 @@ def plot():
     # Close Connection
     data.close()
 
-# NWM DLACZEGO ALE CZASAMI TRZEBA KILKA RAZY NACISNĄĆ WYJŚCIE PO WCZEŚNIEJSZYM ODPALENIU WYKRESU
-
+    # Plot close
+    root.quit()
 
 def help_info():
     help_text = "\n- Pomiar wykonuje się w pozycji siedzącej, w spokoju, po minimum 5-minutowym odpoczynku\n- Przed " \
