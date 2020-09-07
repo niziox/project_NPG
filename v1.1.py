@@ -24,11 +24,153 @@ def leaving():
 
 
 def back(screen):
-    pass
+    if screen == 'add_screen':
+        menu_screen()
+        add_welcome_label.destroy()
+        measure1_label.destroy()
+        measure2_label.destroy()
+        measure1_entry.destroy()
+        measure2_entry.destroy()
+        add_button.destroy()
+        help_button.destroy()
+        back_from_adding_button.destroy()
+
+    elif screen == 'database_screen':
+        menu_screen()
+        database_welcome_label.destroy()
+        scroll_record.destroy()
+        record_print.destroy()
+        filter_button.destroy()
+        back_from_database_button.destroy()
+        plot_button.destroy()
+
+    elif screen == 'filter_screen':
+        database_screen()
+        filtered_frame.destroy()
+        filter_welcome_label.destroy()
+        filtered_scroll_record.destroy()
+        filtered_record_print.destroy()
+        filter_entry.destroy()
+        dropdown_menu.destroy()
+        dropdown_menu_button.destroy()
+        back_from_filter_button.destroy()
+
+    elif screen == 'options_screen':
+        menu_screen()
+        brand_new_path.destroy()
+        existed_path.destroy()
+        options_label.destroy()
+        back_from_options_button.destroy()
+
 
 
 def filter_screen():
-    pass
+    # Create a database or connect to one
+    file = open('paths/path_file.txt', 'a+')
+    file.seek(0)
+    path = file.readline()
+    data = sqlite3.connect(f'{path}.db')
+    file.close()
+
+    # Create cursor
+    cursor = data.cursor()
+
+    # Create table
+    global filtered_frame, filtered_scroll_record, filtered_record_print
+
+    cursor.execute("SELECT *, oid FROM addresses")
+    records = cursor.fetchall()
+
+    filtered_frame = LabelFrame(root, bd=0)
+    filtered_frame.grid(row=1, column=0, columnspan=3)
+    filtered_scroll_record = Scrollbar(filtered_frame, orient='vertical')
+    filtered_scroll_record.grid(row=1, column=1, sticky=NS)
+    filtered_record_print = Text(filtered_frame, width=45, height=9, wrap=NONE, bg='#2e2e3d', fg='white', bd=0,
+                                 yscrollcommand=filtered_scroll_record.set)
+    for record in records:
+        filtered_record_print.insert(END,
+                                     "\t" + str(record[3]) + '.  ' + str(record[2]) + "     " + str(record[0]) + " / " + str(
+                                        record[1]) + "  " + "\t\t\n")
+
+    filtered_record_print.grid(row=1, column=0)
+    filtered_scroll_record.config(command=filtered_record_print.yview)
+
+    def filter_action(action):
+        # Create a database or connect to one
+        file = open('paths/path_file.txt', 'a+')
+        file.seek(0)
+        path = file.readline()
+        data = sqlite3.connect(f'{path}.db')
+        file.close()
+
+        # Create cursor
+        cursor = data.cursor()
+
+        # Create table
+        if action == 'FILTRUJ PO DACIE':
+            filtered_record_print.delete(1.0, END)
+            date = filter_entry.get()
+            cursor.execute("SELECT *, oid FROM addresses WHERE formatted_date = ?", (date,))
+            date_filtered_records = cursor.fetchall()
+            for date_filtered in date_filtered_records:
+                filtered_record_print.insert(END, str(date_filtered[3]) + '.  ' + str(date_filtered[2]) + "     " + str(
+                    date_filtered[0]) + " / " + str(date_filtered[1]) + "\n")
+
+        elif action == 'FILTRUJ PO WARTOŚCI':
+            filtered_record_print.delete(1.0, END)
+            value = filter_entry.get()
+            cursor.execute(
+                "SELECT *, oid FROM addresses WHERE systolic_arterial_pressure = ? or diastolic_blood_pressure = ?",
+                (value, value))
+            value_filtered_records = cursor.fetchall()
+            for value_filtered in value_filtered_records:
+                filtered_record_print.insert(END, str(value_filtered[3]) + '.  ' + str(value_filtered[2]) + "     " + str(
+                    value_filtered[0]) + " / " + str(value_filtered[1]) + "\n")
+
+        elif action == 'USUŃ':
+            cursor.execute(f"DELETE from addresses WHERE oid = {filter_entry.get()}")
+            messagebox.showinfo(title='Delete',
+                                message=f'Pozycja numer {filter_entry.get()} została pomyślnie usunięta')
+            filter_entry.delete(0, END)
+
+        # Commit Changes
+        data.commit()
+
+        # Close Connection
+        data.close()
+
+    # Destroying redundant widgets
+    database_welcome_label.destroy()
+    scroll_record.destroy()
+    record_print.destroy()
+    back_from_database_button.destroy()
+    filter_button.destroy()
+    plot_button.destroy()
+
+    # Defining new widgets
+    global filter_var, filter_welcome_label, back_from_filter_button, filter_entry, dropdown_menu, dropdown_menu_button
+
+    filter_var = StringVar()
+    filter_var.set("-- wybierz --")
+    filter_options = ['FILTRUJ PO DACIE', 'FILTRUJ PO WARTOŚCI', 'USUŃ']
+
+    filter_welcome_label = Label(root, text='BAZA DANYCH', width=19, height=2, font="Verdana 32", bg='#161618',
+                                 fg="white", relief="solid")
+    filter_welcome_label.grid(row=0, column=0, padx=40, pady=15, columnspan=3)
+    filter_entry = Entry(root, width=30, borderwidth=5)
+    filter_entry.grid(row=2, column=0, pady=(15, 10), sticky=E, ipady=1.6)
+    dropdown_menu = OptionMenu(root, filter_var, *filter_options)
+    dropdown_menu.grid(row=2, column=1)
+    dropdown_menu_button = Button(root, text='ZATWIERDŹ', width=10, command=lambda: filter_action(filter_var.get()))
+    dropdown_menu_button.grid(row=2, column=2, sticky=W, ipady=1.7)
+    back_from_filter_button = Button(root, text='POWRÓT', width=20, height=4, command=lambda: back('filter_screen'))
+    back_from_filter_button.grid(row=4, column=0, pady=5, columnspan=3)
+
+    # Commit Changes
+    data.commit()
+
+    # Close Connection
+    data.close()
 
 
 def database_screen():
