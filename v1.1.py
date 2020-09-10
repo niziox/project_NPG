@@ -22,6 +22,10 @@ def leaving():
                         message='Created by \n\n 1. Arkadiusz Kontek \n 2. Dawid Bogon \n 3. Konrad Kropornicki \n 4. Michał Święciło')
     root.quit()
 
+def help_options_fun():
+    help_options_text = "\nTutaj możesz zmienić ścieżkę lub utworzyć nową bazę danych w której będą zapisywane pomiary ciśnień"
+        
+    messagebox.showinfo(title="Wskazówka", message=help_options_text)
 
 def back(screen):
     if screen == 'add_screen':
@@ -60,6 +64,7 @@ def back(screen):
         brand_new_path.destroy()
         existed_path.destroy()
         options_label.destroy()
+        help_options.destroy()
         back_from_options_button.destroy()
 
 
@@ -416,7 +421,7 @@ def options_screen():
     quit_button.destroy()
 
     # Defining new widgets
-    global brand_new_path, existed_path, options_label, back_from_options_button
+    global brand_new_path, existed_path, options_label, back_from_options_button, help_options
 
     options_label = Label(root, text='OPCJE', width=19, height=2, font="Verdana 32", bg='#161618', fg="white",
                           relief="solid")
@@ -425,8 +430,10 @@ def options_screen():
     brand_new_path.grid(row=1, column=0, pady=5)
     existed_path = Button(root, text='OTWÓRZ ZAPIS', width=20, height=4, command=lambda: new_path_window('existed'))
     existed_path.grid(row=2, column=0, pady=5)
+    help_options = Button(root, text='POMOC', width=20, height=4, command=help_options_fun)
+    help_options.grid(row=3, column=0, pady=5)
     back_from_options_button = Button(root, text='POWRÓT', width=20, height=4, command=lambda: back('options_screen'))
-    back_from_options_button.grid(row=3, column=0, pady=5)
+    back_from_options_button.grid(row=4, column=0, pady=5)
     
 
 def menu_screen():
