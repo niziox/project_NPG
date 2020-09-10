@@ -42,7 +42,7 @@ Aplikacja zawiera funkjonalności:
 * Ostrzeżenie o nieprawidłowym ciśnieniu krwi.
 
 ## Status
-Trwają prace nad projektem.
+Projekt zakończony.
 
 ## Kontakt
 Stworozne przez:
