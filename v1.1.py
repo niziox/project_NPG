@@ -22,10 +22,11 @@ def leaving():
                         message='Created by \n\n 1. Arkadiusz Kontek \n 2. Dawid Bogon \n 3. Konrad Kropornicki \n 4. Michał Święciło')
     root.quit()
 
+
 def help_options_fun():
     help_options_text = "\nTutaj możesz zmienić ścieżkę lub utworzyć nową bazę danych w której będą zapisywane pomiary ciśnień"
-        
     messagebox.showinfo(title="Wskazówka", message=help_options_text)
+
 
 def back(screen):
     if screen == 'add_screen':
@@ -66,7 +67,6 @@ def back(screen):
         options_label.destroy()
         help_options.destroy()
         back_from_options_button.destroy()
-
 
 
 def filter_screen():
@@ -230,6 +230,7 @@ def database_screen():
     # Close Connection
     data.close()
 
+
 def plot():
     # Create a database or connect to one
     file = open('paths/path_file.txt', 'a+')
@@ -262,7 +263,6 @@ def plot():
     plt.grid()
     plt.show()
 
-
     # Commit Changes
     data.commit()
 
@@ -271,6 +271,7 @@ def plot():
 
     # Plot close
     root.quit()
+
 
 def help_info():
     help_text = "\n- Pomiar wykonuje się w pozycji siedzącej, w spokoju, po minimum 5-minutowym odpoczynku\n- Przed " \
