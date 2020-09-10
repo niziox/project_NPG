@@ -259,7 +259,9 @@ def plot():
     blue_patch = mpatches.Patch(color='blue', label='ciśnienie tętnicze skurczowe')
     plt.legend(handles=[blue_patch, orange_patch], bbox_to_anchor=(0., 1.05, 1., .105), loc='lower left', ncol=2,
                mode="expand", borderaxespad=-0.4)
+    plt.grid()
     plt.show()
+
 
     # Commit Changes
     data.commit()
