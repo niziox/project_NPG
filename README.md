@@ -34,7 +34,7 @@ $ python v1.1.py
 ## Dokumentacja
 
 Poradnik do korzystania z Gita stworzony przez Arka Kontka: https://aghedupl-my.sharepoint.com/:v:/g/personal/arekkontek_student_agh_edu_pl/ETT5HHI6vLdIvKuC5O6l0RIB_THArzj_ucY0j4XIFJz2Cg?e=Zu0Tmc .
-Sprawozdania z postępów pracy przy projekcie: https://1drv.ms/u/s!AqqT8N-cjmOYhZFUPs7BZVphdtlTrQ?e=VnkKrB .
+Sprawozdania z postępów pracy przy projekcie: https://drive.google.com/drive/folders/1Zt6_VWFaZh8FqhKfoBEXfooPS6iNNty_?usp=sharing .
 
 ## Funkcje
 Aplikacja zawiera funkjonalności:
